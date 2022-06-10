@@ -86,7 +86,7 @@
 	width: 40%;
 }
 
-.settings-ranged > label:first-child {
+.settings-ranged>label:first-child {
 	display: inline-block;
 	width: 25%;
 	text-align: right;
@@ -97,4 +97,8 @@
 	padding: 2px 5px;
 	border-radius: 10px;
 	background-color: darkgray;
+}
+
+#show-more-clusters {
+	margin-top: 0.75em;
 }

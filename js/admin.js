@@ -13,7 +13,7 @@ $(document).ready(function() {
     function checkProgress() {
         $.get(OC.generateUrl('/apps/facerecognition/process')).done(function (progress) {
             if (progress.status) {
-                var desc = '';
+                let desc = '';
                 if (progress.processedImages == progress.totalImages) {
                     desc = t('facerecognition', 'The analysis is finished');
                     desc += ' - ';
@@ -34,7 +34,7 @@ $(document).ready(function() {
                 $('#progress-bar').attr('max', progress.totalImages);
             } else {
                 $('#progress-bar').attr('value', 0);
-                var desc = t('facerecognition', 'The analysis is not started yet');
+                let desc = t('facerecognition', 'The analysis is not started yet');
                 desc += ' - ';
                 desc += n('facerecognition', '%n image in queue', '%n images in queue', progress.totalImages);
                 $('#progress-text').html(desc);

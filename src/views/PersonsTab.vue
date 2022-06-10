@@ -26,44 +26,50 @@
 			<p>{{ error }}</p>
 		</div>
 		<div v-else-if="!isEnabledByUser && !loading" class='emptycontent'>
-			<div class='icon icon-contacts-dark'/>
+			<div class='icon icon-contacts-dark' />
 			<h5>{{ t('facerecognition', 'Facial recognition is disabled') }}</h5>
 			<p><span v-html="settingsUrl"></span></p>
 		</div>
 		<div v-else-if="!isParentEnabled && !loading" class="emptycontent">
-			<div class="icon icon-contacts-dark"/>
+			<div class="icon icon-contacts-dark" />
 			<p>{{ t('facerecognition', 'Facial recognition is disabled for this folder') }}</p>
 		</div>
 		<div v-else-if="!isAllowedFile && !loading" class="emptycontent">
-			<div class="icon icon-contacts-dark"/>
+			<div class="icon icon-contacts-dark" />
 			<p>{{ t('facerecognition', 'The type of storage is not supported to analyze your photos') }}</p>
 		</div>
 		<div v-else-if="isProcessed && this.persons.length > 0">
 			<ul class='faces-list'>
 				<template v-for="person in this.persons">
 					<li class='face-entry' :data-id='person.person_id'>
-						<img class='face-preview' :src='person.thumb_url' width="32" height="32"/>
-						<h5 v-bind:class="['face-name', person.name ? '' : 'unknown-name']">{{ person.name ? person.name : t('facerecognition', 'Unknown') }}</h5>
-						<a v-if="person.photos_url" :href="person.photos_url" rel="noreferrer noopener" class="icon-external" target="_blank" :title='seePhotosTitle'/>
-						<a rel="noreferrer noopener" class="icon-rename" target="_blank" v-on:click="renamePerson(person)" :title='renamePersonTitle'/>
-						<a v-if="person.name" rel="noreferrer noopener" class="icon-disabled-user" target="_blank" v-on:click="detachFace(person)" :title='wrongPersonTitle'/>
+						<img class='face-preview' :src='person.thumb_url' width="32" height="32" />
+						<h5 v-bind:class="['face-name', person.name ? '' : 'unknown-name']">{{ person.name ? person.name
+							: t('facerecognition', 'Unknown')
+							}}</h5>
+						<a v-if="person.photos_url" :href="person.photos_url" rel="noreferrer noopener"
+							class="icon-external" target="_blank" :title='seePhotosTitle' />
+						<a rel="noreferrer noopener" class="icon-rename" target="_blank"
+							v-on:click="renamePerson(person)" :title='renamePersonTitle' />
+						<a v-if="person.name" rel="noreferrer noopener" class="icon-disabled-user" target="_blank"
+							v-on:click="detachFace(person)" :title='wrongPersonTitle' />
 					</li>
 				</template>
 			</ul>
 		</div>
 		<div v-else-if="isProcessed" class='emptycontent'>
-			<div class='icon icon-contacts-dark'/>
+			<div class='icon icon-contacts-dark' />
 			<p>{{ t('facerecognition', 'No people found') }}</p>
 		</div>
 		<div v-else-if="!isProcessed && !isDirectory && !loading" class='emptycontent'>
-			<div class='icon icon-contacts-dark'/>
+			<div class='icon icon-contacts-dark' />
 			<h5>{{ t('facerecognition', 'This image is not yet analyzed') }}</h5>
 			<p><span>{{ t('facerecognition', 'Please, be patient') }}</span></p>
 		</div>
 		<div v-else-if="isDirectory" class='emptycontent'>
-			<div class='icon icon-contacts-dark'/>
+			<div class='icon icon-contacts-dark' />
 			<p>
-				<input class='checkbox' id='searchPersonsToggle' :checked='isChildrensEnabled' type='checkbox' @change="enableDirectoryCheck($event)"/>
+				<input class='checkbox' id='searchPersonsToggle' :checked='isChildrensEnabled' type='checkbox'
+					@change="enableDirectoryCheck($event)" />
 				<label for='searchPersonsToggle'>{{ t('facerecognition', 'Search for persons in the photos of this directory') }}</label>
 			</p>
 			<p><span>{{ t('facerecognition', 'Photos that are not in the gallery are also ignored') }}</span></p>
@@ -80,7 +86,6 @@ export default {
 	name: 'PersonsTabApp',
 
 	components: {
-		Tab,
 	},
 
 	data() {
@@ -119,10 +124,10 @@ export default {
 			return this.$parent.activeTab
 		},
 		settingsUrl() {
-			return t('facerecognition', 'Open <a target="_blank" href="{settingsLink}">settings ↗</a> to enable it', {settingsLink: OC.generateUrl('settings/user/facerecognition')})
+			return t('facerecognition', 'Open <a target="_blank" href="{settingsLink}">settings ↗</a> to enable it', { settingsLink: OC.generateUrl('settings/user/facerecognition') })
 		},
 		faqUrl() {
-			return t('facerecognition', 'See <a target="_blank" href="{docsLink}">documentation ↗</a>.', {docsLink: 'https://github.com/matiasdelellis/facerecognition/wiki/FAQ'})
+			return t('facerecognition', 'See <a target="_blank" href="{docsLink}">documentation ↗</a>.', { docsLink: 'https://github.com/matiasdelellis/facerecognition/wiki/FAQ' })
 		},
 		seePhotosTitle() {
 			return t('facerecognition', 'See all the photos')
@@ -151,10 +156,11 @@ export default {
 
 		async getFacesInfo() {
 			const isDirectory = this.fileInfo.isDirectory()
+			let infoUrl;
 			if (isDirectory) {
-				var infoUrl = OC.generateUrl('/apps/facerecognition/folder')
+				infoUrl = OC.generateUrl('/apps/facerecognition/folder')
 			} else {
-				var infoUrl = OC.generateUrl('/apps/facerecognition/file')
+				infoUrl = OC.generateUrl('/apps/facerecognition/file')
 			}
 
 			try {
@@ -192,12 +198,12 @@ export default {
 			}
 		},
 
-		detachFace: function(person) {
+		detachFace: function (person) {
 			const self = this
 			FrDialogs.detachFace(
-				{thumbUrl: person.thumb_url},
+				{ thumbUrl: person.thumb_url },
 				person.name,
-				function(result, newName) {
+				function (result, newName) {
 					if (result === true) {
 						var infoUrl = OC.generateUrl('/apps/facerecognition/cluster/' + person.person_id + '/detach')
 						Axios.put(infoUrl, {
@@ -214,13 +220,13 @@ export default {
 			)
 		},
 
-		renamePerson: function(person) {
+		renamePerson: function (person) {
 			const self = this
 			if (person.name) {
 				FrDialogs.rename(
 					person.name,
-					[{thumbUrl: person.thumb_url}],
-					function(result, newName) {
+					[{ thumbUrl: person.thumb_url }],
+					function (result, newName) {
 						if (result === true && newName) {
 							var infoUrl = OC.generateUrl('/apps/facerecognition/person/' + person.name)
 							Axios.put(infoUrl, {
@@ -235,8 +241,8 @@ export default {
 					}
 				)
 			} else {
-				FrDialogs.assignName([{thumbUrl: person.thumb_url}],
-					function(result, newName) {
+				FrDialogs.assignName([{ thumbUrl: person.thumb_url }],
+					function (result, newName) {
 						if (result === true && newName) {
 							var infoUrl = OC.generateUrl('/apps/facerecognition/cluster/' + person.person_id)
 							Axios.put(infoUrl, {
@@ -267,7 +273,7 @@ export default {
 				return;
 
 			if (!isDirectory) {
-				this.persons = data.persons.sort(function(a, b) {
+				this.persons = data.persons.sort(function (a, b) {
 					if (a.name == b.name)
 						return 0;
 					if (a.name == null)
@@ -323,5 +329,4 @@ export default {
 	padding: 14px;
 	opacity: 0.7;
 }
-
 </style>
