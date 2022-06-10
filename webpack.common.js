@@ -1,7 +1,12 @@
 const path = require('path')
 const { VueLoaderPlugin } = require('vue-loader')
 const StyleLintPlugin = require('stylelint-webpack-plugin')
-const BundleAnalyzerPlugin = require('@bundle-analyzer/webpack-plugin')
+const ESLintWebpackPlugin = require('eslint-webpack-plugin')
+
+const eslintOptions = {
+	extensions: [`js`, `ts`, `.vue`],
+	exclude: [`node_modules`],
+}
 
 const config = {
 	entry: path.join(__dirname, 'src', 'sidebarloader.js'),
@@ -22,12 +27,6 @@ const config = {
 				use: ['vue-style-loader', 'css-loader', 'sass-loader'],
 			},
 			{
-				test: /\.(js|vue)$/,
-				use: 'eslint-loader',
-				exclude: /node_modules/,
-				enforce: 'pre',
-			},
-			{
 				test: /\.vue$/,
 				loader: 'vue-loader',
 				exclude: /node_modules/,
@@ -42,15 +41,12 @@ const config = {
 	plugins: [
 		new VueLoaderPlugin(),
 		new StyleLintPlugin(),
+		new ESLintWebpackPlugin(eslintOptions)
 	],
 	resolve: {
 		extensions: ['*', '.js', '.vue'],
 		symlinks: false,
 	},
-}
-
-if (process.env.BUNDLE_ANALYZER_TOKEN) {
-	config.plugins.push(new BundleAnalyzerPlugin({ token: process.env.BUNDLE_ANALYZER_TOKEN }))
 }
 
 module.exports = config
